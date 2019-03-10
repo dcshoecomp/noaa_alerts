@@ -18,7 +18,7 @@ key | description
 **zoneid (Required)** | Go to https://alerts.weather.gov/ scroll down to the states and click zone id. 
 
 **states:**
-sensor will return the event state of the current alert
+sensor will return the event type of the current alert
 
 **limitations:**
 Currently it can only return the first active alert reported by noaa
