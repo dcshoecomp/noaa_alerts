@@ -5,7 +5,7 @@ initial test for custom sensor using pypi(https://pypi.org/project/noaa-sdk/) no
 
 To add HA_noaa_alerts to your installation, copy HA_noaa_alerts folder to `<config directory>/custom_components/` and add the following to your configuration.yaml file:
 
-** Example configuration.yaml entry **
+**Example configuration.yaml entry**
 ```yaml
 sensor:
   - platform: HA_noaa_alerts
