@@ -28,10 +28,10 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 })
 
 def setup_platform(hass, config, add_devices, discovery_info=None):
-    sameid = str(config.get(CONF_ZONEID))
-    add_devices([HA_noaa_alertSensor(zoneid)])
+    zoneid = str(config.get(CONF_ZONEID))
+    add_devices([ha_noaa_alertsSensor(zoneid)])
 
-class HA_noaa_alertSensor(Entity):
+class ha_noaa_alertsSensor(Entity):
     def __init__(self, zoneid):
         self._zoneid = zoneid
         self.update()
@@ -49,7 +49,7 @@ class HA_noaa_alertSensor(Entity):
             
     @property
     def name(self):
-        return 'noaa'
+        return 'noaa_alerts'
 
     @property
     def state(self):
