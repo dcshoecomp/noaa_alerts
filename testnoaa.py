@@ -3,15 +3,21 @@ from noaa_sdk import noaa
 CONF_ZONEID="TNZ097"
 #https://api.weather.gov/alerts?zone=TNZ097
 #https://api.weather.gov/alerts/active
-n = noaa.NOAA()
-res = n.alerts(active=1,zone=CONF_ZONEID)
-alerts = res['features']
-description = alerts[0].get('properties').get('description')
+nws = noaa.NOAA().alerts(active=1,zone=CONF_ZONEID)
+nwsalerts = nws['features']
+
+if len(nwsalerts) > 0:
+    description = nwsalerts[0].get('properties').get('description')
+    state = nwsalerts[0].get('properties').get('event')
+else:
+    description = 'none'
+    state = 'none'
+
 print("****description: **** ", description)
-state = alerts[0].get('properties').get('event')
 print("****event: ***** ", state)
-lengthkeys = len(alerts)
+lengthkeys = len(nwsalerts)
 print("****count of alerts: ****", lengthkeys)
 print("\n\n\n\n\n\n\n")
-for alert in alerts:
+
+for alert in nwsalerts:
     print(alert.get('properties').get('description'))
