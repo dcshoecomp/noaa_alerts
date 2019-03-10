@@ -8,7 +8,7 @@ To add HA_noaa_alerts to your installation, copy HA_noaa_alerts folder to `<conf
 **Example configuration.yaml entry**
 ```yaml
 sensor:
-  - platform: HA_noaa_alerts
+  - platform: noaa_alerts
     zoneid: YOUR_ZONE_ID
 ```
 **Configuration variables:**  
