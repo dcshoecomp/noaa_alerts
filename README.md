@@ -4,7 +4,7 @@ HomeAssistant Noaa Alerts Custom Sensor
 initial test for custom sensor using pypi(https://pypi.org/project/noaa-sdk/) noaa-sdk to get an alert sensor
 
 
-To add Dark Sky to your installation, add the following to your configuration.yaml file:
+To add HA_noaa_alerts to your installation, copy HA_noaa_alerts to /config/custom_components and add the following to your configuration.yaml file:
 
 # Example configuration.yaml entry
 sensor:
