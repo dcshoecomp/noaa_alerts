@@ -19,7 +19,7 @@ CONF_ZONEID="zoneid"
 
 ATTR_DESCRIPTION = 'description'
 
-SCAN_INTERVAL = timedelta(seconds=300)
+SCAN_INTERVAL = timedelta(seconds=60)
 
 ICON = 'mdi:weather-hurricane'
 
