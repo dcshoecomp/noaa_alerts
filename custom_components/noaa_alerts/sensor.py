@@ -2,7 +2,7 @@
 A componenet which allow you to get information from noaa weather.gov
 For more details about this component, please refer to the documentation at
 
-https://github.com/dcshoecomp/HA_noaa_alerts
+https://github.com/dcshoecomp/noaa_alerts
 """
 
 import voluptuous as vol
