@@ -12,7 +12,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.components.switch import (PLATFORM_SCHEMA)
 from homeassistant.const import (CONF_LATITUDE, CONF_LONGITUDE)
 
-__version_ = '0.0.2'
+__version_ = '0.0.3'
 
 REQUIREMENTS = ['noaa_sdk']
 
@@ -25,6 +25,8 @@ DEFAULT_ZONEID="LAT,LONG"
 ATTR_DESCRIPTION = 'description'
 ATTR_EVENT = 'event'
 ATTR_SEVERITY = 'severity'
+ATTR_HEADLINE = 'headline'
+ATTR_INSTRUCTION = 'instruction'
 
 SCAN_INTERVAL = timedelta(seconds=60)
 
@@ -69,10 +71,14 @@ class noaa_alertsSensor(Entity):
             self._event_type = nwsalerts[0].get('properties').get('event')
             self._event_severity = nwsalerts[0].get('properties').get('severity')
             self._description = nwsalerts[0].get('properties').get('description')
+            self._headline = nwsalerts[0].get('properties').get('headline')
+            self._instruction = nwsalerts[0].get('properties').get('instruction')
         else:
             self._state = 'none'
             self._event_type = 'none'
             self._event_severity = 'none'
+            self._headline = 'none'
+            self._instruction = 'none'
             self._description = 'none'
 
     @property
@@ -92,5 +98,7 @@ class noaa_alertsSensor(Entity):
         return {
             ATTR_EVENT: self._event_type,
             ATTR_SEVERITY: self._event_severity,
+            ATTR_HEADLINE: self._headline,
+            ATTR_INSTRUCTION: self._instruction,
             ATTR_DESCRIPTION: self._description,
         }
