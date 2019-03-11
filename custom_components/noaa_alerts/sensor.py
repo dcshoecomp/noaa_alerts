@@ -20,6 +20,8 @@ CONF_ZONEID="zoneid"
 CONF_URGENCY="urgency"
 CONF_SEVERITY="severity"
 
+DEFAULT_ZONEID="LAT,LONG"
+
 ATTR_DESCRIPTION = 'description'
 ATTR_EVENT = 'event'
 ATTR_SEVERITY = 'severity'
@@ -29,7 +31,7 @@ SCAN_INTERVAL = timedelta(seconds=60)
 ICON = 'mdi:weather-hurricane'
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Optional(CONF_ZONEID): cv.string,
+    vol.Optional(CONF_ZONEID, default=DEFAULT_ZONEID): cv.string,
     vol.Optional(CONF_LATITUDE): cv.latitude,
     vol.Optional(CONF_LONGITUDE): cv.longitude,
     vol.Optional(CONF_URGENCY): cv.string,
@@ -55,8 +57,9 @@ class noaa_alertsSensor(Entity):
 
     def update(self):
         from noaa_sdk import noaa
-        if self._zoneid is not None:
+        if self._zoneid != 'LAT,LONG':
             params={'zone': self._zoneid}
+
         else:
             params={'point': '{0},{1}'.format(self.latitude,self.longitude)}
         nws = noaa.NOAA().alerts(active=1, **params)
