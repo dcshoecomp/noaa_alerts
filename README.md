@@ -15,11 +15,17 @@ sensor:
 
 key | description  
 :--- | :---  
-**zoneid (Required)** | Go to https://alerts.weather.gov/ scroll down to the states and click zone id. 
+**zoneid (Optional)** | Go to https://alerts.weather.gov/ scroll down to the states and click zone id. By default latitude/longitude will be taken from the Home Assistant configuration
 
 **states:**
-sensor will return the event type of the current alert
+sensor will return the urgency of the current alert (Immediate, Expected, Future, Unknown)
+
+attribute | description  
+:--- | :---  
+event | event type
+severity | severity level(minor, moderate, severe)
+description | full description of event
 
 **limitations:**
-Currently it can only return the first active alert reported by noaa
+Currently it can only return the first active alert in zone
 
