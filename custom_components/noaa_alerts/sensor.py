@@ -64,22 +64,30 @@ class noaa_alertsSensor(Entity):
 
         else:
             params={'point': '{0},{1}'.format(self.latitude,self.longitude)}
-        nws = noaa.NOAA().alerts(active=1, **params)
-        nwsalerts = nws['features']
-        if len(nwsalerts) > 0:
-            self._state = nwsalerts[0].get('properties').get('urgency')
-            self._event_type = nwsalerts[0].get('properties').get('event')
-            self._event_severity = nwsalerts[0].get('properties').get('severity')
-            self._description = nwsalerts[0].get('properties').get('description')
-            self._headline = nwsalerts[0].get('properties').get('headline')
-            self._instruction = nwsalerts[0].get('properties').get('instruction')
-        else:
-            self._state = 'none'
+        try:
+            nws = noaa.NOAA().alerts(active=1, **params)
+            nwsalerts = nws['features']
+            if len(nwsalerts) > 0:
+                self._state = nwsalerts[0].get('properties').get('urgency')
+                self._event_type = nwsalerts[0].get('properties').get('event')
+                self._event_severity = nwsalerts[0].get('properties').get('severity')
+                self._description = nwsalerts[0].get('properties').get('description')
+                self._headline = nwsalerts[0].get('properties').get('headline')
+                self._instruction = nwsalerts[0].get('properties').get('instruction')
+            else:
+                self._state = 'none'
+                self._event_type = 'none'
+                self._event_severity = 'none'
+                self._headline = 'none'
+                self._instruction = 'none'
+                self._description = 'none'
+        except Exception as err:
+            self._state = 'Error'
             self._event_type = 'none'
             self._event_severity = 'none'
             self._headline = 'none'
             self._instruction = 'none'
-            self._description = 'none'
+            self._description = err
 
     @property
     def name(self):
