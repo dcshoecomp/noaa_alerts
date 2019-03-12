@@ -23,7 +23,7 @@ sensor will return the urgency of the current alert (Immediate, Expected, Future
 attribute | description  
 :--- | :---  
 event | event type
-severity | severity level(minor, moderate, severe)
+severity | severity level(minor, moderate, severe, extreme)
 headline | summary headline of event
 instruction | noaa recommended instructions for possible evacuation
 description | full description of event
