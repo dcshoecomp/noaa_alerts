@@ -12,7 +12,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.components.switch import (PLATFORM_SCHEMA)
 from homeassistant.const import (CONF_LATITUDE, CONF_LONGITUDE)
 
-__version_ = '0.0.4'
+__version_ = '0.0.5'
 
 REQUIREMENTS = ['noaa_sdk']
 
