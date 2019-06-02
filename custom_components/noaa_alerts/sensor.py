@@ -11,6 +11,7 @@ from homeassistant.helpers.entity import Entity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.switch import (PLATFORM_SCHEMA)
 from homeassistant.const import (CONF_LATITUDE, CONF_LONGITUDE)
+from homeassistant.util import Throttle
 
 __version_ = '0.0.5'
 
@@ -75,7 +76,7 @@ class noaa_alertsSensor(Entity):
         self._event_urgency = event_urgency
         self._event_severity = event_severity
         self.update()
-
+    @Throttle(SCAN_INTERVAL)
     def update(self):
         from noaa_sdk import noaa
         if self._zoneid != 'LAT,LONG':
