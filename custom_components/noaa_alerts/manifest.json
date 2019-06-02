@@ -3,7 +3,7 @@
     "name": "Noaa Alerts",
     "documentation": "https://github.com/dcshoecomp/noaa_alerts",
     "dependencies": [],
-    "codeowners": [],
+    "codeowners": [@dcshoecomp],
     "requirements": []
   }
   
