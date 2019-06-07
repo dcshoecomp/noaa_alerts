@@ -1,23 +1,18 @@
 """
-A component which allows you to get information from noaa weather.gov
+A componenet which allows you to get information from noaa weather.gov
 For more details about this component, please refer to the documentation at
+
 https://github.com/dcshoecomp/noaa_alerts
 """
-
-import logging
-import json
 
 import voluptuous as vol
 from datetime import timedelta
 from homeassistant.helpers.entity import Entity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.switch import (PLATFORM_SCHEMA)
-from homeassistant.const import (CONF_LATITUDE, CONF_LONGITUDE, CONF_SCAN_INTERVAL)
-from homeassistant.util import Throttle
+from homeassistant.const import (CONF_LATITUDE, CONF_LONGITUDE)
 
-_LOGGER = logging.getLogger(__name__)
-
-__version_ = '0.0.7'
+__version_ = '0.0.4'
 
 REQUIREMENTS = ['noaa_sdk']
 
@@ -43,47 +38,45 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_LONGITUDE): cv.longitude,
     vol.Optional(CONF_URGENCY): cv.string,
     vol.Optional(CONF_SEVERITY): cv.string,
-    vol.Optional(CONF_SCAN_INTERVAL): cv.string,
 })
 
-def setup_platform(hass, config, add_entities, discovery_info=None):
+def setup_platform(hass, config, add_devices, discovery_info=None):
     zoneid = str(config.get(CONF_ZONEID))
     latitude = config.get(CONF_LATITUDE, hass.config.latitude)
     longitude = config.get(CONF_LONGITUDE, hass.config.longitude)
     event_urgency = str(config.get(CONF_URGENCY))
     event_severity = str(config.get(CONF_SEVERITY))
-    update_interval = config.get(CONF_SCAN_INTERVAL, SCAN_INTERVAL)
-    add_entities([noaa_alertsSensor(zoneid, event_urgency, event_severity, latitude, longitude,update_interval)], True)
+    add_devices([noaa_alertsSensor(zoneid, event_urgency, event_severity, latitude, longitude)])
 
 def sortedbyurgencyandseverity(prop):
-    if (prop['urgency']).lower() == 'immediate':
+    if (prop['properties']['urgency']).lower() == 'immediate':
         sortedvalue = 1
-    elif (prop['urgency']).lower() == 'expected':
+    elif (prop['properties']['urgency']).lower() == 'expected':
         sortedvalue = 10
-    elif (prop['urgency']).lower() == 'future':
+    elif (prop['properties']['urgency']).lower() == 'future':
         sortedvalue = 100
     else:
         sortedvalue = 1000
-    if (prop['severity']).lower() == 'extreme':
+    if (prop['properties']['severity']).lower() == 'extreme':
         sortedvalue = sortedvalue * 1
-    elif (prop['severity']).lower() == 'severe':
+    elif (prop['properties']['severity']).lower() == 'severe':
         sortedvalue = sortedvalue * 2
-    elif (prop['severity']).lower() == 'moderate':
+    elif (prop['properties']['severity']).lower() == 'moderate':
         sortedvalue = sortedvalue * 3
     else:
         sortedvalue = sortedvalue * 4
     return sortedvalue
 
 class noaa_alertsSensor(Entity):
-    def __init__(self, zoneid, event_urgency, event_severity, latitude, longitude, interval):
+    def __init__(self, zoneid, event_urgency, event_severity, latitude, longitude):
         self._zoneid = zoneid
         self.latitude = latitude
         self.longitude = longitude
         self._event_urgency = event_urgency
         self._event_severity = event_severity
-        self.update = Throttle(interval)(self._update)
+        self.update()
 
-    def _update(self):
+    def update(self):
         from noaa_sdk import noaa
         if self._zoneid != 'LAT,LONG':
             params={'zone': self._zoneid}
@@ -133,10 +126,7 @@ class noaa_alertsSensor(Entity):
 
     @property
     def name(self):
-        name = "NOAA Alerts"
-        if self._zoneid != 'LAT,LONG':
-            name += ' (' + self._zoneid + ')'
-        return name
+        return 'noaa_alerts'
 
     @property
     def state(self):
@@ -171,7 +161,3 @@ class noaa_alertsSensor(Entity):
                 'description2': self._description2,
             }
 
-    @property
-    def unit_of_measurement(self):
-        """Return the unit of measurement of this entity, if any."""
-        return None
