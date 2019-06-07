@@ -1,5 +1,6 @@
 Version | Changes
 :--- | :---
+v0.0.7pre-release | added "unit_of_measurement" HA property<br>changed add_devices to add_entities to avoid future issues<br>added throttle aka scan_interval config option
 v0.0.6 | manifest.json is now working<br>added __init__.py<br>entity_id is now noaa_alerts_(your zone id)
 
 # noaa_alerts
@@ -20,6 +21,8 @@ sensor:
 key | description  
 :--- | :---  
 **zoneid (Optional)** | Go to https://alerts.weather.gov/ scroll down to the states and click zone id. By default latitude/longitude will be taken from the Home Assistant configuration
+scan_interval (Optional) |  Minimum time interval between updates. Default is 1 minute. Supported formats:<br>scan_interval: 'HH:MM:SS'<br>scan_interval: 'HH:MM'
+
 
 **states:** sensor will return the urgency of the current alert (Immediate, Expected, Future, Unknown), if multiple events exist will take most urgent state, then most severe and return 2 events.
 
