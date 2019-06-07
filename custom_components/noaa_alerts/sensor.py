@@ -110,6 +110,7 @@ class noaa_alertsSensor(Entity):
                 self._attributes['headline'] = 'none'
                 self._attributes['instruction'] = 'none'
                 self._attributes['description'] = 'none'
+                self._attributes['alerts_string'] = 'none'
         except Exception as err:
             self._state = 'Error'
             self._event_type = 'none'
