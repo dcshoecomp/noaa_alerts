@@ -25,7 +25,7 @@ key | description
 scan_interval (Optional) |  Minimum time interval between updates. Default is 1 minute. Supported formats:<br>scan_interval: 'HH:MM:SS'<br>scan_interval: 'HH:MM'
 
 
-**states:** sensor will return the number of current alerts, attributes will be the most severe, with exception of alerts_string
+**states:** sensor will return the number of current alerts, attributes will be the 1st most severe alert, with exception of alerts_string
 
 attribute | description  
 :--- | :---  
