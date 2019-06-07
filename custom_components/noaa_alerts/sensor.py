@@ -17,7 +17,7 @@ from homeassistant.util import Throttle
 
 _LOGGER = logging.getLogger(__name__)
 
-__version_ = 'pre-release'
+__version_ = '0.0.7'
 
 REQUIREMENTS = ['noaa_sdk']
 
