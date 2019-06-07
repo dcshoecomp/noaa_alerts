@@ -16,7 +16,7 @@ from homeassistant.const import (CONF_LATITUDE, CONF_LONGITUDE)
 
 _LOGGER = logging.getLogger(__name__)
 
-__version_ = '0.0.5'
+__version_ = '0.0.6'
 
 REQUIREMENTS = ['noaa_sdk']
 
