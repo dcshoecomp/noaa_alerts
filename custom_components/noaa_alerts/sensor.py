@@ -91,15 +91,45 @@ class noaa_alertsSensor(Entity):
             params={'point': '{0},{1}'.format(self.latitude,self.longitude)}
         try:
             nws = noaa.NOAA().alerts(active=1, **params)
-            nwsalerts = []
-            for alert in nws['features'] :
-                nwsalerts.append(alert['properties'])
-            self._state = len(nwsalerts)
-            self._attributes = {}
-            self._attributes['alerts'] = sorted(nwsalerts, key=sortedbyurgencyandseverity)
-            self._attributes['alerts_string'] = json.dumps(self._attributes['alerts'])
+            nwsalerts = nws['features']
+            if len(nwsalerts) > 1:
+                nwsalerts = sorted(nwsalerts, key=sortedbyurgencyandseverity)
+                self._state = nwsalerts[0]['properties']['urgency']
+                self._event_type = nwsalerts[0]['properties']['event']
+                self._event_severity = nwsalerts[0]['properties']['severity']
+                self._description = nwsalerts[0]['properties']['description']
+                self._headline = nwsalerts[0]['properties']['headline']
+                self._instruction = nwsalerts[0]['properties']['instruction']
+                #second set of events
+                self._state2 = nwsalerts[0]['properties']['urgency']
+                self._event_type2 = nwsalerts[0]['properties']['event']
+                self._event_severity2 = nwsalerts[0]['properties']['severity']
+                self._description2 = nwsalerts[0]['properties']['description']
+                self._headline2 = nwsalerts[0]['properties']['headline']
+                self._instruction2 = nwsalerts[0]['properties']['instruction']
+            elif len(nwsalerts) == 1:
+                self._state = nwsalerts[0]['properties']['urgency']
+                self._event_type = nwsalerts[0]['properties']['event']
+                self._event_severity = nwsalerts[0]['properties']['severity']
+                self._description = nwsalerts[0]['properties']['description']
+                self._headline = nwsalerts[0]['properties']['headline']
+                self._instruction = nwsalerts[0]['properties']['instruction']
+                self._state2 = 'none'
+            else:
+                self._state = 'none'
+                self._event_type = 'none'
+                self._event_severity = 'none'
+                self._headline = 'none'
+                self._instruction = 'none'
+                self._description = 'none'
+                self._state2 = 'none'
         except Exception as err:
-            _LOGGER.error(err)
+            self._state = 'Error'
+            self._event_type = 'none'
+            self._event_severity = 'none'
+            self._headline = 'none'
+            self._instruction = 'none'
+            self._description = err
 
     @property
     def name(self):
@@ -118,10 +148,30 @@ class noaa_alertsSensor(Entity):
 
     @property
     def device_state_attributes(self):
-        """Return the attributes of the sensor."""
-        return self._attributes
+        if self._state2 == 'none':
+            return {
+                ATTR_EVENT: self._event_type,
+                ATTR_SEVERITY: self._event_severity,
+                ATTR_HEADLINE: self._headline,
+                ATTR_INSTRUCTION: self._instruction,
+                ATTR_DESCRIPTION: self._description,
+            }
+        else:
+            return {
+                ATTR_EVENT: self._event_type,
+                ATTR_SEVERITY: self._event_severity,
+                ATTR_HEADLINE: self._headline,
+                ATTR_INSTRUCTION: self._instruction,
+                ATTR_DESCRIPTION: self._description,
+                'urgency2': self._state2,
+                'event2': self._event_type2,
+                'severity2': self._event_severity2,
+                'headline2': self._headline2,
+                'instruction2': self._instruction2,
+                'description2': self._description2,
+            }
 
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement of this entity, if any."""
-        return 'alert'
+        return None
