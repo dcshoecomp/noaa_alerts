@@ -1,3 +1,7 @@
+Version | Changes
+:--- | :---
+v0.0.6 | manifest.json is now working<br>added __init__.py<br>entity_id is now noaa_alerts_(your zone id)
+
 # noaa_alerts
 HomeAssistant Noaa Alerts Custom Sensor
 
