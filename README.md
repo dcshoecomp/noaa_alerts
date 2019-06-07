@@ -1,6 +1,6 @@
 Version | Changes
 :--- | :---
-v0.0.7pre-release | added "unit_of_measurement" HA property<br>changed add_devices to add_entities to avoid future issues<br>added throttle aka scan_interval config option
+v0.0.7 | added "unit_of_measurement" HA property<br>changed add_devices to add_entities to avoid future issues<br>added throttle aka scan_interval config option
 v0.0.6 | manifest.json is now working<br>added __init__.py<br>entity_id is now noaa_alerts_(your zone id)
 
 # noaa_alerts
