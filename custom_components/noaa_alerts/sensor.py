@@ -12,11 +12,12 @@ from datetime import timedelta
 from homeassistant.helpers.entity import Entity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.switch import (PLATFORM_SCHEMA)
-from homeassistant.const import (CONF_LATITUDE, CONF_LONGITUDE)
+from homeassistant.const import (CONF_LATITUDE, CONF_LONGITUDE, CONF_SCAN_INTERVAL)
+from homeassistant.util import Throttle
 
 _LOGGER = logging.getLogger(__name__)
 
-__version_ = '0.0.6'
+__version_ = 'pre-release'
 
 REQUIREMENTS = ['noaa_sdk']
 
@@ -42,15 +43,17 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_LONGITUDE): cv.longitude,
     vol.Optional(CONF_URGENCY): cv.string,
     vol.Optional(CONF_SEVERITY): cv.string,
+    vol.Optional(CONF_SCAN_INTERVAL): cv.string,
 })
 
-def setup_platform(hass, config, add_devices, discovery_info=None):
+def setup_platform(hass, config, add_entities, discovery_info=None):
     zoneid = str(config.get(CONF_ZONEID))
     latitude = config.get(CONF_LATITUDE, hass.config.latitude)
     longitude = config.get(CONF_LONGITUDE, hass.config.longitude)
     event_urgency = str(config.get(CONF_URGENCY))
     event_severity = str(config.get(CONF_SEVERITY))
-    add_devices([noaa_alertsSensor(zoneid, event_urgency, event_severity, latitude, longitude)])
+    update_interval = config.get(CONF_SCAN_INTERVAL, SCAN_INTERVAL)
+    add_entities([noaa_alertsSensor(zoneid, event_urgency, event_severity, latitude, longitude,update_interval)], True)
 
 def sortedbyurgencyandseverity(prop):
     if (prop['urgency']).lower() == 'immediate':
@@ -72,15 +75,15 @@ def sortedbyurgencyandseverity(prop):
     return sortedvalue
 
 class noaa_alertsSensor(Entity):
-    def __init__(self, zoneid, event_urgency, event_severity, latitude, longitude):
+    def __init__(self, zoneid, event_urgency, event_severity, latitude, longitude, interval):
         self._zoneid = zoneid
         self.latitude = latitude
         self.longitude = longitude
         self._event_urgency = event_urgency
         self._event_severity = event_severity
-        self.update()
+        self.update = Throttle(interval)(self._update)
 
-    def update(self):
+    def _update(self):
         from noaa_sdk import noaa
         if self._zoneid != 'LAT,LONG':
             params={'zone': self._zoneid}
@@ -117,3 +120,8 @@ class noaa_alertsSensor(Entity):
     def device_state_attributes(self):
         """Return the attributes of the sensor."""
         return self._attributes
+
+    @property
+    def unit_of_measurement(self):
+        """Return the unit of measurement of this entity, if any."""
+        return 'alert'
