@@ -1,5 +1,6 @@
 Version | Changes
 :--- | :---
+v0.0.8 | merged concept of claytonjn's idea of unlimited alerts. Sensor now will dump all alerts in (alerts_string)
 v0.0.7 | added "unit_of_measurement" HA property<br>changed add_devices to add_entities to avoid future issues<br>added throttle aka scan_interval config option
 v0.0.6 | manifest.json is now working<br>added __init__.py<br>entity_id is now noaa_alerts_(your zone id)
 
@@ -24,21 +25,14 @@ key | description
 scan_interval (Optional) |  Minimum time interval between updates. Default is 1 minute. Supported formats:<br>scan_interval: 'HH:MM:SS'<br>scan_interval: 'HH:MM'
 
 
-**states:** sensor will return the urgency of the current alert (Immediate, Expected, Future, Unknown), if multiple events exist will take most urgent state, then most severe and return 2 events.
+**states:** sensor will return the number of current alerts, attributes will be the 1st most severe alert, with exception of alerts_string
 
 attribute | description  
 :--- | :---  
+urgency | (Immediate, Expected, Future, Unknown) sorted in that order
 event | event type
 severity | severity level(minor, moderate, severe, extreme)
 headline | summary headline of event
 instruction | noaa recommended instructions for possible evacuation
 description | full description of event
-
-hidden attributes | Until second alert event exists
-:--- | :---
-urgency2 | second urgency state
-event2 | event type
-severity2 | severity level(minor, moderate, severe, extreme)
-headline2 | summary headline of event
-instruction2 | noaa recommended instructions for possible evacuation
-description2 | full description of event
+alerts_string | full json dump of all alerts in zone
