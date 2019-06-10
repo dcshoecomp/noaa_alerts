@@ -53,22 +53,22 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     event_urgency = str(config.get(CONF_URGENCY))
     event_severity = str(config.get(CONF_SEVERITY))
     update_interval = config.get(CONF_SCAN_INTERVAL, SCAN_INTERVAL)
-    add_entities([noaa_alertsSensor(zoneid, event_urgency, event_severity, latitude, longitude,update_interval)], True)
+    add_entities([noaa_alertsSensor(zoneid, event_urgency, event_severity, latitude, longitude, update_interval)], True)
 
 def sortedbyurgencyandseverity(prop):
-    if (prop['properties']['urgency']).lower() == 'immediate':
+    if (prop['urgency']).lower() == 'immediate':
         sortedvalue = 1
-    elif (prop['properties']['urgency']).lower() == 'expected':
+    elif (prop['urgency']).lower() == 'expected':
         sortedvalue = 10
-    elif (prop['properties']['urgency']).lower() == 'future':
+    elif (prop['urgency']).lower() == 'future':
         sortedvalue = 100
     else:
         sortedvalue = 1000
-    if (prop['properties']['severity']).lower() == 'extreme':
+    if (prop['severity']).lower() == 'extreme':
         sortedvalue = sortedvalue * 1
-    elif (prop['properties']['severity']).lower() == 'severe':
+    elif (prop['severity']).lower() == 'severe':
         sortedvalue = sortedvalue * 2
-    elif (prop['properties']['severity']).lower() == 'moderate':
+    elif (prop['severity']).lower() == 'moderate':
         sortedvalue = sortedvalue * 3
     else:
         sortedvalue = sortedvalue * 4
@@ -91,33 +91,30 @@ class noaa_alertsSensor(Entity):
             params={'point': '{0},{1}'.format(self.latitude,self.longitude)}
         try:
             nws = noaa.NOAA().alerts(active=1, **params)
-            nwsalerts = nws['features']
-            self._attributes = {}
+            nwsalerts = []
+            for alert in nws['features'] :
+                nwsalerts.append(alert['properties'])
             self._state = len(nwsalerts)
-            if self._state > 0:
-                nwsalerts = sorted(nwsalerts, key=sortedbyurgencyandseverity)
-                self._attributes['urgency'] = nwsalerts[0]['properties']['urgency']
-                self._attributes['event_type'] = nwsalerts[0]['properties']['event']
-                self._attributes['event_severity'] = nwsalerts[0]['properties']['severity']
-                self._attributes['description'] = nwsalerts[0]['properties']['description']
-                self._attributes['headline'] = nwsalerts[0]['properties']['headline']
-                self._attributes['instruction'] = nwsalerts[0]['properties']['instruction']
-                self._attributes['alerts_string'] = json.dumps(nwsalerts)
-            else:
-                self._attributes['urgency'] = 'none'
-                self._attributes['event_type'] = 'none'
-                self._attributes['event_severity'] = 'none'
-                self._attributes['headline'] = 'none'
-                self._attributes['instruction'] = 'none'
-                self._attributes['description'] = 'none'
-                self._attributes['alerts_string'] = 'none'
+            self._attributes = {}
+            self._attributes['alerts'] = sorted(nwsalerts, key=sortedbyurgencyandseverity)
+            self._attributes['urgency'] = self._attributes['alerts'][0]['urgency'] if self._state > 0 else None
+            self._attributes['event_type'] = self._attributes['alerts'][0]['event'] if self._state > 0 else None
+            self._attributes['event_severity'] = self._attributes['alerts'][0]['severity'] if self._state > 0 else None
+            self._attributes['description'] = self._attributes['alerts'][0]['description'] if self._state > 0 else None
+            self._attributes['headline'] = self._attributes['alerts'][0]['headline'] if self._state > 0 else None
+            self._attributes['instruction'] = self._attributes['alerts'][0]['instruction'] if self._state > 0 else None
+            self._attributes['alerts_string'] = json.dumps(self._attributes['alerts'])
         except Exception as err:
             self._state = 'Error'
-            self._event_type = 'none'
-            self._event_severity = 'none'
-            self._headline = 'none'
-            self._instruction = 'none'
-            self._description = err
+            self._attributes['alerts'] = None
+            self._attributes['urgency'] = None
+            self._attributes['event_type'] = None
+            self._attributes['event_severity'] = None
+            self._attributes['description'] = err
+            self._attributes['headline'] = None
+            self._attributes['instruction'] = None
+            self._attributes['alerts_string'] = None
+            _LOGGER.error(err)
 
     @property
     def name(self):
