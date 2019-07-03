@@ -103,7 +103,7 @@ class noaa_alertsSensor(Entity):
             self._attributes['description'] = self._attributes['alerts'][0]['description'] if self._state > 0 else None
             self._attributes['headline'] = self._attributes['alerts'][0]['headline'] if self._state > 0 else None
             self._attributes['instruction'] = self._attributes['alerts'][0]['instruction'] if self._state > 0 else None
-            self._attributes['alerts_string'] = json.dumps(self._attributes['alerts'])
+            self._attributes['alerts'] = nws
         except Exception as err:
             self._state = 'Error'
             self._attributes['alerts'] = None
