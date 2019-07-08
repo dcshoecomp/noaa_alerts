@@ -4,5 +4,5 @@
   "documentation": "https://github.com/dcshoecomp/noaa_alerts",
   "requirements": ["noaa_sdk"],
   "dependencies": [],
-  "codeowners": []
+  "codeowners": ["@dcshoecomp"]
 }
