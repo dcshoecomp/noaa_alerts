@@ -16,6 +16,7 @@ To add noaa_alerts to your installation, download the latest release zip and cop
 sensor:
   - platform: noaa_alerts
     zoneid: YOUR_ZONE_ID
+    zoneid: ANOTHER_ZONE_ID
 ```
 **Configuration variables:**  
 
