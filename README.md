@@ -21,11 +21,11 @@ sensor:
 
 key | description  
 :--- | :---  
-**zoneid (Optional)** | Go to https://alerts.weather.gov/ scroll down to the states and click zone id. By default latitude/longitude will be taken from the Home Assistant configuration
+**zoneid (Optional)** | Go to https://alerts.weather.gov/ scroll down to the states and click zone id. By default latitude/longitude will be taken from the Home Assistant configuration. Mulitple Zones accepted. 
 scan_interval (Optional) |  Minimum time interval between updates. Default is 1 minute. Supported formats:<br>scan_interval: 'HH:MM:SS'<br>scan_interval: 'HH:MM'
 
 
-**states:** sensor will return the number of current alerts, attributes will be the 1st most severe alert, with exception of alerts_string
+**states:** sensor will return the number of current alerts, attributes will be the 1st most severe alert, with exception of alerts_string. Naming format is noaa_alerts_<your zoneid here>.
 
 attribute | description  
 :--- | :---  
