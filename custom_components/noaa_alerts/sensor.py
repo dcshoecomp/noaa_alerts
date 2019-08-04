@@ -14,10 +14,11 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.components.switch import (PLATFORM_SCHEMA)
 from homeassistant.const import (CONF_LATITUDE, CONF_LONGITUDE, CONF_SCAN_INTERVAL)
 from homeassistant.util import Throttle
+from noaa_sdk import noaa
 
 _LOGGER = logging.getLogger(__name__)
 
-__version_ = '0.0.8'
+__version_ = '0.0.9'
 
 REQUIREMENTS = ['noaa_sdk']
 
@@ -84,7 +85,6 @@ class noaa_alertsSensor(Entity):
         self.update = Throttle(interval)(self._update)
 
     def _update(self):
-        from noaa_sdk import noaa
         if self._zoneid != 'LAT,LONG':
             params={'zone': self._zoneid}
         else:
