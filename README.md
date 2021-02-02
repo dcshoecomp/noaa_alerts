@@ -1,3 +1,6 @@
+**Donate if you like my work and this project has brought you joy**
+https://www.paypal.com/donate?hosted_button_id=VNZ5AXWNEU238
+
 Version | Changes
 :--- | :---
 v0.0.9 | moved import to help with performance.
