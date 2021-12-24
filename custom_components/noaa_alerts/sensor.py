@@ -19,7 +19,7 @@ from noaa_sdk import noaa
 
 _LOGGER = logging.getLogger(__name__)
 
-__version_ = '21.03.0'
+__version_ = '21.12.0'
 
 REQUIREMENTS = ['noaa_sdk']
 
@@ -139,7 +139,7 @@ class noaa_alertsSensor(Entity):
         return ICON
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         """Return the attributes of the sensor."""
         return self._attributes
 

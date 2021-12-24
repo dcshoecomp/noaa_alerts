@@ -1,6 +1,6 @@
 {
   "domain": "noaa_alerts",
-  "version": "21.03.0",
+  "version": "21.12.0",
   "name": "Noaa Alerts",
   "documentation": "https://github.com/dcshoecomp/noaa_alerts",
   "requirements": ["noaa_sdk"],
