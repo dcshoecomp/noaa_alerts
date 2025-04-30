@@ -15,11 +15,11 @@ from homeassistant.components.switch import (PLATFORM_SCHEMA)
 from homeassistant.const import (
     CONF_LATITUDE, CONF_LONGITUDE, CONF_SCAN_INTERVAL)
 from homeassistant.util import Throttle
-from noaa_sdk import noaa
+from noaa_sdk import NOAA
 
 _LOGGER = logging.getLogger(__name__)
 
-__version_ = '21.12.0'
+__version_ = '25.04.30'
 
 REQUIREMENTS = ['noaa_sdk']
 
@@ -95,29 +95,27 @@ class noaa_alertsSensor(Entity):
         else:
             params = {'point': '{0},{1}'.format(self.latitude, self.longitude)}
         try:
-            nws = noaa.NOAA().alerts(active=1, **params)
+            nws = NOAA().alerts(active=1, **params)
             nwsalerts = []
             for alert in nws['features']:
                 nwsalerts.append(alert['properties'])
             self._state = len(nwsalerts)
             self._attributes = {}
-            self._attributes['alerts'] = sorted(
-                nwsalerts, key=sortedbyurgencyandseverity)
+            self._attributes['alerts'] = sorted(nwsalerts, key=sortedbyurgencyandseverity)
             self._attributes['urgency'] = self._attributes['alerts'][0]['urgency'] if self._state > 0 else None
             self._attributes['event_type'] = self._attributes['alerts'][0]['event'] if self._state > 0 else None
             self._attributes['event_severity'] = self._attributes['alerts'][0]['severity'] if self._state > 0 else None
             self._attributes['description'] = self._attributes['alerts'][0]['description'] if self._state > 0 else None
             self._attributes['headline'] = self._attributes['alerts'][0]['headline'] if self._state > 0 else None
             self._attributes['instruction'] = self._attributes['alerts'][0]['instruction'] if self._state > 0 else None
-            self._attributes['alerts_string'] = json.dumps(
-                self._attributes['alerts'])
+            self._attributes['alerts_string'] = json.dumps(self._attributes['alerts'])
         except Exception as err:
-            self._state = 'Error'
+            self._state = '0'
             self._attributes['alerts'] = None
             self._attributes['urgency'] = None
             self._attributes['event_type'] = None
             self._attributes['event_severity'] = None
-            self._attributes['description'] = err
+            self._attributes['description'] = None
             self._attributes['headline'] = None
             self._attributes['instruction'] = None
             self._attributes['alerts_string'] = None
