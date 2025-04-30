@@ -3,7 +3,8 @@ https://www.paypal.com/donate?hosted_button_id=VNZ5AXWNEU238
 
 Version | Changes
 :--- | :---
-v21.12.0 | Resolved warning for deprecated property name.
+v25.04.30 | Fix for error handling.
+<strike>v21.12.0 | Resolved warning for deprecated property name.
 <strike>v21.03.0 | Scan Interval changed to 120 seconds to reduce api denials, Change to Calendar Versioning, Manifest to include Version
 <strike>v0.0.9 | moved import to help with performance.
 <strike>v0.0.8 | merged concept of claytonjn's idea of unlimited alerts. Sensor now will dump all alerts in (alerts_string)
